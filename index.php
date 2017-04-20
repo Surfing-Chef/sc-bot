@@ -11,7 +11,12 @@ function follow_links($url){
 
   foreach ($linklist as $link){
 
-    echo $link->getAttribute("href")."\n";
+    $l =  $link->getAttribute("href");
+    if (substr($l, 0, 1) == '/' && substr($l, 0, 2) != '//') {
+      $l = parse_url($url)['scheme'] . "://" . parse_url($url)['host'] . $l;
+    }
+
+    echo $l . "\n";
 
   }
 
