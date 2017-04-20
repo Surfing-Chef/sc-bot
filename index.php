@@ -3,6 +3,7 @@
 $start = "http://localhost/sc-bot/test.html";
 
 $already_crawled = array();
+$crawling = array();
 
 function get_details($url){
 
@@ -36,13 +37,19 @@ function get_details($url){
 
   }
 
-  echo $keywords."\n";
+  return '{
+    "Title":"'.$title.'",
+    "Description":"'.str_replace("n","", $description).'",
+    "Keywords":"'.str_replace("n","", $keywords).'",
+    "URL":"'.str_replace("n","", $url).',"
+  }';
 
 }
 
 function follow_links($url){
 
   global $already_crawled;
+  global $crawling;
 
   $options = array(
     'http'=>array(
@@ -81,15 +88,22 @@ function follow_links($url){
     if(!in_array($l, $already_crawled)){
 
       $already_crawled[] = $l;
-      echo get_details($l);
+      $crawling[] = $l;
+      echo get_details($l). "\n";
       // echo $l . "\n";
 
     }
 
   }
 
+  // Indefinite Crawl Loop
+  // array_shift($crawling);
+  // foreach ($crawling as $site){
+  //   follow_links($site);
+  // }
+
 }
 
 follow_links($start);
 
-print_r($already_crawled);
+//print_r($already_crawled);
