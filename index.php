@@ -1,6 +1,6 @@
-<?php
+<?php 
 
-$start = "http://localhost/sc-bot/test.html";
+$start = "http://localhost/sc-bot/sites.html";
 
 function get_details($url){
 
@@ -25,22 +25,15 @@ function get_details($url){
   for ( $i = 0; $i < $metas->length; $i++ ){
     $meta = $metas->item($i);
 
-    if ($meta->getAttribute("name") == strtolower("description")){
-      $description = $meta->getAttribute("content");
-    }
-    if ($meta->getAttribute("name") == strtolower("keywords")){
-      $keywords = $meta->getAttribute("content");
-    }
-
+    if ($meta->getAttribute("property") == strtolower("og:site_name")){
+      $title = $meta->getAttribute("content");
+     }
   }
 
   return '{
     "Title":"'.$title.'",
-    "Description":"'.str_replace("\\n","", $description).'",
-    "Keywords":"'.str_replace("\\n","", $keywords).'",
     "URL":"'.str_replace("\\n","", $url).',"
   }';
-
 }
 
 function follow_links($url){
@@ -64,9 +57,7 @@ function follow_links($url){
     $l =  $link->getAttribute("href");
 
     echo get_details($l). "\n";
-
   }
-
 }
 
 follow_links($start);
