@@ -1,0 +1,55 @@
+[
+  {
+    "site-name" : "Epicurious",
+    "site-url" : "http://www.epicurious.com/"
+  },
+  {
+    "site-name" : "Saveur",
+    "site-url" : "http://www.saveur.com/"
+  },
+  {
+    "site-name" : "Food and Wine",
+    "site-url" : "http://www.foodandwine.com/"
+  },
+  {
+    "site-name" : "Food 52",
+    "site-url" : "https://food52.com/"
+  },
+  {
+    "site-name" : "Silver Surfers",
+    "site-slug" : "silver",
+    "site-url" : "https://www.silversurfers.com/best-of-the-web/food-best-of-the-web/"
+  },
+  {
+    "site-name" : "UCLA | Science and Food",
+    "site-url" : "https://scienceandfooducla.wordpress.com/"
+  },
+  {
+    "site-name" : "Chowhound",
+    "site-url" : "https://www.chowhound.com/"
+  },
+  {
+    "site-name" : "Foodtank",
+    "site-url" : "https://foodtank.com/"
+  },
+  {
+    "site-name" : "NPR | The Salt",
+    "site-url" : "http://www.npr.org/sections/thesalt/"
+  },
+  {
+    "site-name" : "Allrecipes",
+    "site-url" : "http://allrecipes.com/"
+  },
+  {
+    "site-name" : "The Kitchen",
+    "site-url" : "http://www.thekitchn.com/"
+  },
+  {
+    "site-name" : "Huffington Post | Taste",
+    "site-url" : "http://www.huffingtonpost.com/section/taste"
+  },
+  {
+    "site-name" : "101 Cookbooks",
+    "site-url" : "http://www.101cookbooks.com/"
+  }
+]
