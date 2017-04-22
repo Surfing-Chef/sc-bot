@@ -1,63 +1,93 @@
-<?php 
+<?php
 
 $start = "http://localhost/sc-bot/sites.html";
 
-function get_details($url){
+require_once("parseFunctions.php");
 
-  $options = array(
-    'http'=>array(
-      'method'=>"GET",
-      'headers'=>"User-Agent: sc-Bot/0.1\n"
-    )
-  );
+// Import JSON file
+$sites_json = file_get_contents('http://localhost/sc-bot/sites.json');
 
-  $context = stream_context_create($options);
+// Convert JSON to array
+$sites_arr = json_decode($sites_json, true);
 
-  $doc = new DOMDocument();
-  @$doc->loadHTML(@file_get_contents($url, false, $context));
+// Check age of page storing json data,
+// older than 24hr delte and creat a new one.
+// If not older than 24 hrs, abort.
 
-  $title = @$doc->getElementsByTagName("title");
-  $title = @$title->item(0)->nodeValue;
+// FUNCTION to get details of site
+function get_details($site_name, $site_url){
+  $site_data = array();
 
-  $description = "";
-  $keywords = "";
-  $metas = $doc->getElementsByTagName("meta");
-  for ( $i = 0; $i < $metas->length; $i++ ){
-    $meta = $metas->item($i);
-
-    if ($meta->getAttribute("property") == strtolower("og:site_name")){
-      $title = $meta->getAttribute("content");
-     }
+  switch ($site_name) {
+    case "Epicurious" :
+      // This function will take the site-url,
+      // and parse the page, returning appropriate
+      // data to be loaded into the json page.
+      $site_data = epicurious($site_name, $site_url);
+      break;
+    case "Saveur" :
+      $site_data = saveur($site_name, $site_url);
+      break;
+    case "Food and Wine" :
+      echo "run Food and Wine function"."\n";
+      break;
+    // case "Food 52" :
+    //   echo "run Food 52 function"."\n";
+    //   break;
+    // case "Silver Surfers" :
+    //   echo "run Silver Surfers function"."\n";
+    //   break;
+    // case "UCLA | Science and Food" :
+    //   echo "run UCLA function"."\n";
+    //   break;
+    // case "Chowhound" :
+    //   echo "run Chowhound function"."\n";
+    //   break;
+    // case "Foodtank" :
+    //   echo "run Foodtank function"."\n";
+    //   break;
+    // case "NPR | The Salt" :
+    //   echo "run NPR function"."\n";
+    //   break;
+    // case "Allrecipes" :
+    //   echo "run Allrecipes function"."\n";
+    //   break;
+    // case "The Kitchen" :
+    //   echo "run Kitchen function"."\n";
+    //   break;
+    // case "Huffington Post | Taste" :
+    //   echo "run Taste function"."\n";
+    //   break;
+    // case "101 Cookbooks" :
+    //   echo "run 101 Cookbooks function"."\n";
+    //   break;
   }
 
   return '{
-    "Title":"'.$title.'",
-    "URL":"'.str_replace("\\n","", $url).',"
+    "Title":"'.$site_data[0].'",
+    "URL":"'.$site_data[1].'",
+    "Topic":"'.$site_data[2].'",
+    "Title":"'.$site_data[3].'",
+    "Feed Link":"'.$site_data[4].'",
+    "Image Link":"'.$site_data[5].'"
   }';
+
+  //file_put_contents('sites-info.json', print_r($b, true));
 }
+// END get_details()
 
-function follow_links($url){
 
-  $options = array(
-    'http'=>array(
-      'method'=>"GET",
-      'headers'=>"User-Agent: sc-Bot/0.1\n"
-    )
-  );
+function follow_links($sites_arr){
 
-  $context = stream_context_create($options);
+  foreach ($sites_arr as $site){
+    // print_r($site);
+    $site_name = $site['site-name'];
+    $site_url =  $site['site-url'];
 
-  $doc = new DOMDocument();
-  @$doc->loadHTML(@file_get_contents($url, false, $context));
-
-  $linklist = @$doc->getElementsByTagName('a');
-
-  foreach ($linklist as $link){
-
-    $l =  $link->getAttribute("href");
-
-    echo get_details($l). "\n";
+    echo get_details($site_name, $site_url). "\n";
   }
-}
 
-follow_links($start);
+}
+// END follow_links()
+
+follow_links($sites_arr);
