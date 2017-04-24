@@ -17,7 +17,6 @@
   },
   {
     "site-name" : "Silver Surfers",
-    "site-slug" : "silver",
     "site-url" : "https://www.silversurfers.com/best-of-the-web/food-best-of-the-web/"
   },
   {
@@ -41,15 +40,11 @@
     "site-url" : "http://allrecipes.com/"
   },
   {
-    "site-name" : "The Kitchen",
+    "site-name" : "Kitchn",
     "site-url" : "http://www.thekitchn.com/"
   },
   {
     "site-name" : "Huffington Post | Taste",
     "site-url" : "http://www.huffingtonpost.com/section/taste"
-  },
-  {
-    "site-name" : "101 Cookbooks",
-    "site-url" : "http://www.101cookbooks.com/"
   }
 ]
