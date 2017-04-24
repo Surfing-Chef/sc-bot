@@ -23,7 +23,7 @@ function get_http_response_code($site_url) {
 }
 
 // FUNCTION to get details of site
-function get_details($site_name, $site_url){
+function get_details($site_name, $site_url, $open){
   $site_data = array();
 
   switch ($site_name) {
@@ -68,7 +68,7 @@ function get_details($site_name, $site_url){
       break;
   }
 
-  return
+  $feed_data =
   '{
     "Title":"'.$site_data[0].'",
     "URL":"'.$site_data[1].'",
@@ -77,12 +77,14 @@ function get_details($site_name, $site_url){
     "Image Link":"'.$site_data[4].'"
   }';
 
+  fwrite($open, $feed_data);
+
   //file_put_contents('sites-info.json', print_r($b, true));
 }
 // END get_details()
 
 
-function follow_links($sites_arr){
+function follow_links($sites_arr, $open){
 
   foreach ($sites_arr as $site){
     // print_r($site);
@@ -93,7 +95,7 @@ function follow_links($sites_arr){
     $response_code = get_http_response_code($site_url);
 
     if ($response_code === "200"){
-      echo get_details($site_name, $site_url).",\n";
+      echo get_details($site_name, $site_url, $open).",\n";
     } else { // skip site if not responsive
       continue;
     }
@@ -103,4 +105,36 @@ function follow_links($sites_arr){
 }
 // END follow_links()
 
-follow_links($sites_arr);
+FUNCTION build_feed($sites_arr){
+
+  $current_time = time();
+  // How old (in seconds) before re-creating
+  $target_time = 60;
+  $cache_time = filemtime("cache.json");
+  $age = $current_time - $cache_time;
+
+  if (time() - $target_time > $cache_time){
+    // Too old
+
+    // delete file
+    unlink("cache.json");
+
+    // create and open file to write
+    $open = fopen("cache.json", "w");
+
+    // write data to file
+    follow_links($sites_arr, $open);
+
+    // close file
+    fclose($open);
+
+  } else {
+    // Too young
+    exit;
+  }
+
+  //fclose("cache.json");
+
+}
+
+build_feed($sites_arr);
