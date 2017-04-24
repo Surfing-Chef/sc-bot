@@ -14,6 +14,14 @@ $sites_arr = json_decode($sites_json, true);
 // older than 24hr delte and creat a new one.
 // If not older than 24 hrs, abort.
 
+// FUNCTION to get site header response code.
+function get_http_response_code($site_url) {
+
+  $headers = get_headers($site_url);
+  return substr($headers[0], 9, 3);
+
+}
+
 // FUNCTION to get details of site
 function get_details($site_name, $site_url){
   $site_data = array();
@@ -29,47 +37,44 @@ function get_details($site_name, $site_url){
       $site_data = saveur($site_name, $site_url);
       break;
     case "Food and Wine" :
-      echo "run Food and Wine function"."\n";
+      $site_data = foodandwine($site_name, $site_url);
       break;
-    // case "Food 52" :
-    //   echo "run Food 52 function"."\n";
-    //   break;
-    // case "Silver Surfers" :
-    //   echo "run Silver Surfers function"."\n";
-    //   break;
-    // case "UCLA | Science and Food" :
-    //   echo "run UCLA function"."\n";
-    //   break;
-    // case "Chowhound" :
-    //   echo "run Chowhound function"."\n";
-    //   break;
-    // case "Foodtank" :
-    //   echo "run Foodtank function"."\n";
-    //   break;
-    // case "NPR | The Salt" :
-    //   echo "run NPR function"."\n";
-    //   break;
-    // case "Allrecipes" :
-    //   echo "run Allrecipes function"."\n";
-    //   break;
-    // case "The Kitchen" :
-    //   echo "run Kitchen function"."\n";
-    //   break;
-    // case "Huffington Post | Taste" :
-    //   echo "run Taste function"."\n";
-    //   break;
-    // case "101 Cookbooks" :
-    //   echo "run 101 Cookbooks function"."\n";
-    //   break;
+    case "Food 52" :
+      $site_data = food52($site_name, $site_url);
+      break;
+    case "Silver Surfers" :
+      $site_data = silversurfers($site_name, $site_url);
+      break;
+    case "UCLA | Science and Food" :
+      $site_data = ucla($site_name, $site_url);
+      break;
+    case "Chowhound" :
+      $site_data = chowhound($site_name, $site_url);
+      break;
+    case "Foodtank" :
+      $site_data = foodtank($site_name, $site_url);
+      break;
+    case "NPR | The Salt" :
+     $site_data = thesalt($site_name, $site_url);
+      break;
+    case "Allrecipes" :
+      $site_data = allrecipes($site_name, $site_url);
+      break;
+    case "Kitchn" :
+      $site_data = kitchn($site_name, $site_url);
+      break;
+    case "Huffington Post | Taste" :
+      $site_data = taste($site_name, $site_url);
+      break;
   }
 
-  return '{
+  return
+  '{
     "Title":"'.$site_data[0].'",
     "URL":"'.$site_data[1].'",
-    "Topic":"'.$site_data[2].'",
-    "Title":"'.$site_data[3].'",
-    "Feed Link":"'.$site_data[4].'",
-    "Image Link":"'.$site_data[5].'"
+    "Title":"'.$site_data[2].'",
+    "Feed Link":"'.$site_data[3].'",
+    "Image Link":"'.$site_data[4].'"
   }';
 
   //file_put_contents('sites-info.json', print_r($b, true));
@@ -84,7 +89,15 @@ function follow_links($sites_arr){
     $site_name = $site['site-name'];
     $site_url =  $site['site-url'];
 
-    echo get_details($site_name, $site_url). "\n";
+    // Get site headers response code
+    $response_code = get_http_response_code($site_url);
+
+    if ($response_code === "200"){
+      echo get_details($site_name, $site_url).",\n";
+    } else { // skip site if not responsive
+      continue;
+    }
+
   }
 
 }
