@@ -10,6 +10,6 @@
 
 ### Next Up...   
 - get the PHP to run when the site is first loaded
-- set the feed to automatically update
+- [set the feed to automatically update](https://code.tutsplus.com/tutorials/scheduling-tasks-with-cron-jobs--net-8800)
 - use wp database instead of cache
 - a plug in
