@@ -10,9 +10,8 @@ $sites_json = file_get_contents('http://localhost/sc-bot/sites.json');
 // Convert JSON to array
 $sites_arr = json_decode($sites_json, true);
 
-// Check age of page storing json data,
-// older than 24hr delte and creat a new one.
-// If not older than 24 hrs, abort.
+// Create array to hold all site data
+$feed_container = array();
 
 // FUNCTION to get site header response code.
 function get_http_response_code($site_url) {
@@ -23,14 +22,15 @@ function get_http_response_code($site_url) {
 }
 
 // FUNCTION to get details of site
-function get_details($site_name, $site_url, $open){
+function get_details($site_name, $site_url){
   $site_data = array();
+  global $feed_container;
 
   switch ($site_name) {
     case "Epicurious" :
       // This function will take the site-url,
       // and parse the page, returning appropriate
-      // data to be loaded into the json page.
+      // data to be loaded into the cache page.
       $site_data = epicurious($site_name, $site_url);
       break;
     case "Saveur" :
@@ -68,73 +68,66 @@ function get_details($site_name, $site_url, $open){
       break;
   }
 
-  $feed_data =
-  '{
-    "Title":"'.$site_data[0].'",
-    "URL":"'.$site_data[1].'",
-    "Title":"'.$site_data[2].'",
-    "Feed Link":"'.$site_data[3].'",
-    "Image Link":"'.$site_data[4].'"
-  }';
+  $feed_container[] = array
+  (
+    $site_data[0],
+    $site_data[1],
+    $site_data[2],
+    $site_data[3],
+    $site_data[4]
+  );
 
-  fwrite($open, $feed_data);
-
-  //file_put_contents('sites-info.json', print_r($b, true));
 }
 // END get_details()
 
 
-function follow_links($sites_arr, $open){
+function follow_links($sites_arr){
+  global $feed_container;
 
   foreach ($sites_arr as $site){
-    // print_r($site);
+
     $site_name = $site['site-name'];
     $site_url =  $site['site-url'];
 
+    echo $site_name."\n";
     // Get site headers response code
     $response_code = get_http_response_code($site_url);
 
+    // check if site responds okay
     if ($response_code === "200"){
-      echo get_details($site_name, $site_url, $open).",\n";
+      get_details($site_name, $site_url);
     } else { // skip site if not responsive
       continue;
     }
 
   }
+  // create, open, overwrite, and close cache file
+  $target = "cache.txt";
+
+  file_put_contents($target, print_r($feed_container, true));
 
 }
 // END follow_links()
 
-FUNCTION build_feed($sites_arr){
+function build_feed($sites_arr){
 
   $current_time = time();
   // How old (in seconds) before re-creating
   $target_time = 60;
-  $cache_time = filemtime("cache.json");
+  @$cache_time = filemtime("cache.txt");
   $age = $current_time - $cache_time;
 
-  if (time() - $target_time > $cache_time){
+  if (time() - $target_time > $cache_time || !$cache_time){
     // Too old
-
-    // delete file
-    unlink("cache.json");
-
-    // create and open file to write
-    $open = fopen("cache.json", "w");
-
-    // write data to file
-    follow_links($sites_arr, $open);
-
-    // close file
-    fclose($open);
+    follow_links($sites_arr);
 
   } else {
     // Too young
     exit;
   }
 
-  //fclose("cache.json");
-
 }
+// END build_feed
 
+// Build it!
 build_feed($sites_arr);
