@@ -23,14 +23,15 @@ function get_http_response_code($site_url) {
 
 // FUNCTION to get details of site
 function get_details($site_name, $site_url){
+  // Create array for site-specific data
   $site_data = array();
+  // Ensure the contaner array is usable within the function
   global $feed_container;
 
+  // Logic to specify which site parser function to run.
+  // Each parser function return an array.
   switch ($site_name) {
     case "Epicurious" :
-      // This function will take the site-url,
-      // and parse the page, returning appropriate
-      // data to be loaded into the cache page.
       $site_data = epicurious($site_name, $site_url);
       break;
     case "Saveur" :
@@ -68,6 +69,7 @@ function get_details($site_name, $site_url){
       break;
   }
 
+  // Add each site-specific data to the container-array
   $feed_container[] = array
   (
     $site_data[0],
@@ -79,7 +81,6 @@ function get_details($site_name, $site_url){
 
 }
 // END get_details()
-
 
 function follow_links($sites_arr){
   global $feed_container;
@@ -101,26 +102,32 @@ function follow_links($sites_arr){
     }
 
   }
-  // create, open, overwrite, and close cache file
+
+  // Name and path of target file
   $target = "cache.txt";
 
-  file_put_contents($target, print_r($feed_container, true));
+  // Serialize container for writing to file
+  $feed_container_string = serialize($feed_container);
+
+  // Write contents to file
+  file_put_contents($target, $feed_container_string);
 
 }
 // END follow_links()
 
 function build_feed($sites_arr){
-
+  // Get current time (in seconds)
   $current_time = time();
-  // How old (in seconds) before re-creating
+  // Specify age of file before re-creating (in seconds)
   $target_time = 60;
+  // Get time of file creation (in seconds)
   @$cache_time = filemtime("cache.txt");
+  // Get age file (in seconds)
   $age = $current_time - $cache_time;
 
   if (time() - $target_time > $cache_time || !$cache_time){
     // Too old
     follow_links($sites_arr);
-
   } else {
     // Too young
     exit;
