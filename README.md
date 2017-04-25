@@ -7,3 +7,9 @@
 ### Links
 [Accessing JSON with PHP](http://stackoverflow.com/questions/29308898/how-do-i-extract-data-from-json-with-php)
 [Get data form a JSON file using PHP](http://stackoverflow.com/questions/19758954/get-data-from-json-file-with-php)
+
+### Next Up...   
+- get the PHP to run when the site is first loaded
+- set the feed to automatically update
+- use wp database instead of cache
+- a plug in
