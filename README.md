@@ -8,11 +8,12 @@
 [Accessing JSON with PHP](http://stackoverflow.com/questions/29308898/how-do-i-extract-data-from-json-with-php)
 [Get data form a JSON file using PHP](http://stackoverflow.com/questions/19758954/get-data-from-json-file-with-php)
 
-### Next Up...   
-- get the PHP to run when the site is first loaded
-- [set the feed to automatically update](https://code.tutsplus.com/tutorials/scheduling-tasks-with-cron-jobs--net-8800)
+### Auto Updates  
+- While testing on a Windows 10 machine with WAMP:  
+  - [Using Task Scheduler](http://www.businesslegions.com/blog/2014/08/09/create-cron-jobs-wamp/)  
+- After deployment, using a *cronjob*
+  - [set the feed to automatically update](https://code.tutsplus.com/tutorials/scheduling-tasks-with-cron-jobs--net-8800)  
+
+### Sometime, down the road a ways...
 - use wp database instead of cache
 - a plug in
-
-### ATTEMPTS AND NEEDED FIXES
-Attempted to load bot/index.php into site in functions.php.  Stalled.  Maybe change name.
