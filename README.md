@@ -13,3 +13,6 @@
 - [set the feed to automatically update](https://code.tutsplus.com/tutorials/scheduling-tasks-with-cron-jobs--net-8800)
 - use wp database instead of cache
 - a plug in
+
+### ATTEMPTS AND NEEDED FIXES
+Attempted to load bot/index.php into site in functions.php.  Stalled.  Maybe change name.
