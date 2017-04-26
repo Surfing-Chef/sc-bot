@@ -47,12 +47,13 @@ function foodandwine($site_name, $site_url){
   $html = file_get_html($site_url);
 
   // Parse HTML
-  $img_att = "data-srcset";
-  $feed_base = $html->find("article[class=story-card]",0);
-  $feed_title = $feed_base->find("div[class=story-card__content] span", 0)->plaintext;
+  $img_att = "srcset";
+  $feed_base = $html->find("article[class=hero-feature]",0);
+  $feed_title = $feed_base->find("div[class=hero-feature__content] span",0)->plaintext;
   $feed_title = trim(preg_replace('/\s\s+/', ' ', $feed_title));
-  $feed_url = $feed_base->find("a", 0)->href;
-  $feed_image = $feed_base->find("div[class=story-card__img-wrap] picture source", 1)->$img_att;
+  $feed_url = $feed_base->find("a[class=hero-feature__link]",0)->href;
+  $feed_image = $feed_base->find("a[class=hero-feature__link] source",0)->$img_att;
+  $feed_image = substr(trim($feed_image), 0, -3);
 
   // Return array of data
   return array ( $site_name, $site_url, $feed_title, $feed_url, $feed_image );
