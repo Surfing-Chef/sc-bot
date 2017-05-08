@@ -70,14 +70,18 @@ function get_details($site_name, $site_url){
   }
 
   // Add each site-specific data to the container-array
-  $feed_container[] = array
-  (
-    $site_data[0],
-    $site_data[1],
-    $site_data[2],
-    $site_data[3],
-    $site_data[4]
-  );
+  if(!is_null($site_data)){
+    $feed_container[] = array
+    (
+      $site_data[0],
+      $site_data[1],
+      $site_data[2],
+      $site_data[3],
+      $site_data[4]
+    );
+  } else {
+    //  send msg to log?
+  }
 
 }
 // END get_details()

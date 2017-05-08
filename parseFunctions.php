@@ -1,7 +1,14 @@
 <?php
 require "simple_html_dom.php";
 
-// fopen and fwrite, the fclose
+function check_feed_base ($feed_base){
+  if(!is_null($feed_base)){
+    return $feed_base;
+  } else{
+    echo "Null value detected.\n";
+    exit();
+  }
+}
 
 // Epicurious
 function epicurious($site_name, $site_url){
@@ -30,14 +37,20 @@ function saveur($site_name, $site_url){
 
   // Parse HTML
   $img_att = "data-lgsrc";
-  $feed_base =$html->find("div[class=field-page-sections]",0);
-  $feed_title = $feed_base->find("H3 a", 0)->plaintext;
-  $feed_title = trim(preg_replace('/\s\s+/', ' ', $feed_title));
-  $feed_url = $feed_base->find("H3 a", 0)->href;
-  $feed_image = $html->find("div[class=field-image] a img", 0)->$img_att;
 
-  // Return array of data
-  return array ( $site_name, $site_url, $feed_title, $feed_url, $feed_image );
+  $feed_base = $html->find("div[class=field-page-section]",0);
+
+  if(!is_null($feed_base)){
+    $feed_title = $feed_base->find("H3 a", 0)->plaintext ? $feed_base->find("H3 a", 0)->plaintext : "NODATA";
+    $feed_title = trim(preg_replace('/\s\s+/', ' ', $feed_title));
+    $feed_url = $feed_base->find("H3 a", 0)->href ? $feed_base->find("H3 a", 0)->href : "NODATA";
+    $feed_image = $html->find("div[class=field-image] a img", 0)->$img_att ? $html->find("div[class=field-image] a img", 0)->$img_att : "NODATA";
+
+    return array ( $site_name, $site_url, $feed_title, $feed_url, $feed_image );
+
+  } else {
+    echo "Null value detected.\n";
+  }
 
 }
 
